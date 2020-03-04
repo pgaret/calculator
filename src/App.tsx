@@ -1,25 +1,66 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, createContext } from 'react';
+import Display from './components/Display';
+import styles from './App.module.css';
+import ButtonPanel from './components/ButtonPanel';
+
+export interface ContextStructure {
+  currentValue: number,
+  functionMap: {
+    [key: string]: Function
+  }
+}
+
+export const CalculatorContext = createContext<Partial<ContextStructure>>({});;
 
 function App() {
+  const [ currentValue, setCurrentValue ] = useState(0);
+  const [ nextOperation, setNextOperation ] = useState('');
+
+  function runOperation(value: number, operation: string) {
+    console.log(value, operation);
+    switch (operation) {
+      case '+':
+        return value + currentValue;
+      case '-':
+        return value - currentValue;    
+      case 'x':
+        return value * currentValue;
+      case '%':
+        return value / currentValue;
+    }
+    return currentValue;
+  }
+
+  function typeNumber(num: number) {
+    if (nextOperation) {
+      setCurrentValue(runOperation(num, nextOperation));
+      setNextOperation('');
+    } else {
+      setCurrentValue(Number(`${currentValue}${num}`))
+    }
+  }
+
+  function setOperation(operation: string) {
+    setNextOperation(operation);
+  }
+
+  const functionMap = {
+    number: typeNumber,
+    function: setOperation
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <CalculatorContext.Provider
+      value={{
+        currentValue: currentValue,
+        functionMap: functionMap
+      }}
+    >
+    <div className={styles.container}>
+      <Display />
+      <ButtonPanel />
     </div>
+    </CalculatorContext.Provider>
   );
 }
 
