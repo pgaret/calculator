@@ -1,0 +1,30 @@
+.button {
+    background-color: rgb(128, 128, 128);
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition-duration: 200ms;
+    transition-property: background-color;
+    margin: 2px;
+}
+
+.button:hover {
+    background-color: rgb(138, 138, 138);
+}
+
+.function {
+    background-color: rgb(255, 165, 0);
+}
+
+.function:hover {
+    background-color: rgb(255, 175, 0);
+}
+
+.active {
+    background-color: white;
+}

@@ -5,6 +5,7 @@ import ButtonPanel from './components/ButtonPanel';
 
 export interface ContextStructure {
   currentValue: number,
+  nextOperation: string,
   functionMap: {
     [key: string]: Function
   }
@@ -27,39 +28,54 @@ function App() {
         return value * currentValue;
       case '%':
         return value / currentValue;
+      case 'C':
+        return 0;
     }
     return currentValue;
   }
 
   function typeNumber(num: number) {
-    if (nextOperation) {
-      setCurrentValue(runOperation(num, nextOperation));
-      setNextOperation('');
-    } else {
-      setCurrentValue(Number(`${currentValue}${num}`))
-    }
+    setCurrentValue(Number(`${currentValue}${num}`))
   }
 
   function setOperation(operation: string) {
+    // if (nextOperation) {
+    //   setCurrentValue(runOperation(num, nextOperation));
+    //   setNextOperation('');
+    // }
     setNextOperation(operation);
+  }
+
+  function evaluateCalculator() {
+    // Do thing
+  }
+
+  function resetCalculator() {
+    setNextOperation('');
+    setCurrentValue(0);
   }
 
   const functionMap = {
     number: typeNumber,
-    function: setOperation
+    function: setOperation,
+    reset: resetCalculator,
+    evalulate: evaluateCalculator
   }
 
   return (
     <CalculatorContext.Provider
       value={{
         currentValue: currentValue,
+        nextOperation: nextOperation,
         functionMap: functionMap
       }}
     >
-    <div className={styles.container}>
-      <Display />
-      <ButtonPanel />
-    </div>
+      <div className={styles.container}>
+        <div className={styles.calculator}>
+          <Display />
+          <ButtonPanel />
+        </div>
+      </div>
     </CalculatorContext.Provider>
   );
 }

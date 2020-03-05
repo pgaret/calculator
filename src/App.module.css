@@ -1,9 +1,15 @@
-.main {
+.container {
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: darkslategrey;
+  background-color: rgb(25, 25, 25);
+}
+
+.calculator {
+  padding: 5vh 5vw;
+  background-color: lightgray;
+  border-radius: 5px;
 }
