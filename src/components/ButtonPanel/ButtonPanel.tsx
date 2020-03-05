@@ -33,7 +33,7 @@ function ButtonPanel() {
                                                 <>
                                                         <Button type='number' value={0} />
                                                         <Button type='reset' value='C' />
-                                                        <Button type='function' value="=" />
+                                                        <Button type='eval' value="=" />
                                                 </>
                                         </Row>
                                 </Column>

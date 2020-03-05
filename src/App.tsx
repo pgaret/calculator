@@ -5,49 +5,70 @@ import ButtonPanel from './components/ButtonPanel';
 
 export interface ContextStructure {
   currentValue: number,
+  tempValue: number | null,
   nextOperation: string,
   functionMap: {
     [key: string]: Function
   }
 }
 
+interface TempValue {
+  tempValue: number
+}
+
 export const CalculatorContext = createContext<Partial<ContextStructure>>({});;
 
 function App() {
-  const [ currentValue, setCurrentValue ] = useState(0);
-  const [ nextOperation, setNextOperation ] = useState('');
+  const [ currentValue, setCurrentValue ] = useState<number>(0);
+  const [ tempValue, setTempValue ] = useState<number | null>(null);
+  const [ nextOperation, setNextOperation ] = useState<string>('');
 
   function runOperation(value: number, operation: string) {
-    console.log(value, operation);
+    console.log(currentValue, operation, value);
     switch (operation) {
       case '+':
-        return value + currentValue;
+        return currentValue + value;
       case '-':
-        return value - currentValue;    
+        return currentValue - value;    
       case 'x':
-        return value * currentValue;
+        return currentValue * value;
       case '%':
-        return value / currentValue;
+        return currentValue / value;
       case 'C':
         return 0;
     }
     return currentValue;
   }
 
+  function combineNumbers(num1: number, num2: number) {
+    return Number(`${num1}${num2}`);
+  }
+
   function typeNumber(num: number) {
-    setCurrentValue(Number(`${currentValue}${num}`))
+    console.log(num);
+    if (nextOperation) {
+      setTempValue(tempValue ? num : combineNumbers(Number(tempValue), num));
+    } else {
+      setCurrentValue(combineNumbers(currentValue, num));
+    }
   }
 
   function setOperation(operation: string) {
-    // if (nextOperation) {
-    //   setCurrentValue(runOperation(num, nextOperation));
-    //   setNextOperation('');
-    // }
-    setNextOperation(operation);
+    if (nextOperation) {
+      setCurrentValue(runOperation(Number(tempValue), nextOperation));
+      setTempValue(null);
+      setNextOperation(operation);
+    } else {
+      setNextOperation(operation);
+    }
   }
 
   function evaluateCalculator() {
-    // Do thing
+    if (nextOperation) {
+      setCurrentValue(runOperation(Number(tempValue), nextOperation));
+      setTempValue(null);
+      setNextOperation('');
+    }
   }
 
   function resetCalculator() {
@@ -59,13 +80,14 @@ function App() {
     number: typeNumber,
     function: setOperation,
     reset: resetCalculator,
-    evalulate: evaluateCalculator
+    eval: evaluateCalculator
   }
 
   return (
     <CalculatorContext.Provider
       value={{
         currentValue: currentValue,
+        tempValue: tempValue,
         nextOperation: nextOperation,
         functionMap: functionMap
       }}

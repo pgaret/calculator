@@ -3,9 +3,9 @@ import { CalculatorContext } from '../../App';
 import styles from './Display.module.css';
 
 function Display() {
-    const { currentValue } = useContext(CalculatorContext);
+    const { currentValue, tempValue } = useContext(CalculatorContext);
     return (
-        <div className={styles.display}>{currentValue}</div>
+        <div className={styles.display}>{tempValue || currentValue}</div>
     );
 }
 

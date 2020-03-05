@@ -26,5 +26,9 @@
 }
 
 .active {
-    background-color: white;
+    background-color: gold;
+}
+
+.active:hover {
+    background-color: gold;
 }
