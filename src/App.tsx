@@ -74,6 +74,7 @@ function App() {
   function resetCalculator() {
     setNextOperation('');
     setCurrentValue(0);
+    setTempValue(null);
   }
 
   const functionMap = {
